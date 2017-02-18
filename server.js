@@ -13,7 +13,6 @@ app.get('/posts/index', handlers.getPosts);
 app.get('/photos/index', handlers.getPhotos);
 app.get('/topics/index', handlers.getTopics);
 app.get('/pages/index', handlers.getPages);
-app.get('/members/index', handlers.getMembers);
 app.post('/users/add', handlers.addUser);
 app.post('/users/edit', handlers.editUser);
 
