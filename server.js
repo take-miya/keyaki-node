@@ -2,11 +2,12 @@ const express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     expressValidator = require('express-validator'),
+    Config = require('config'),
     debug = require('debug')('server'),
     handlers = require('./handlers');
 
-app.listen(3030, function() {
-    debug("Node.js is listening to PORT: 3030");
+app.listen(Config.port, function() {
+    debug("Node.js is listening to PORT: " + Config.port);
 });
 
 app.use(bodyParser.json());
