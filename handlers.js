@@ -160,7 +160,7 @@ exports.getPages = function (req, res, next) {
         const updatedFrom = req.query.updated_from || '2000-01-01T00:00:00+0900';
         debug('updatedFrom', updatedFrom);
         const [pages, lastUpdated] = yield [
-            knex.select('id', 'url', 'title', 'published', 'deleted')
+            knex.select('id', 'url', 'title', 'site', 'published', 'deleted')
                 .from('pages')
                 .where('modified', '>', updatedFrom)
                 .orderBy('modified', 'desc')
