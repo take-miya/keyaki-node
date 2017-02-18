@@ -13,7 +13,6 @@ exports.getMembers = function (req, res, next) {
             knex.select('id', 'name', 'deleted')
                 .from('members')
                 .where('modified', '>', updatedFrom)
-                .orderBy('modified', 'desc')
                 .then(function (rows) {
                     return Promise.all(rows.map(function (row) {
                         row.deleted = row.deleted ? moment(row.deleted).format() : null;
@@ -42,7 +41,6 @@ exports.getMatomes = function (req, res, next) {
             knex.select('id', 'title', 'feed', 'deleted')
                 .from('matomes')
                 .where('modified', '>', updatedFrom)
-                .orderBy('modified', 'desc')
                 .then(function (rows) {
                     return Promise.all(rows.map(function (row) {
                         row.deleted = row.deleted ? moment(row.deleted).format() : null;
@@ -208,7 +206,7 @@ exports.addUser = function (req, res, next) {
         const result = yield req.getValidationResult();
         if (!result.isEmpty()) throw new Error('validation error');
         debug('user', req.body.user);
-        
+
         const [exist] = yield knex.select('id')
             .from('users')
             .where('token', '=', req.body.user.token);
