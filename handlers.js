@@ -119,7 +119,7 @@ exports.getPhotos = function (req, res, next) {
         ];
         debug('photos', photos);
         debug('lastUpdated', lastUpdated);
-        res.json({ result: 'success', last_updated: lastUpdated, photos: phptos });
+        res.json({ result: 'success', last_updated: lastUpdated, photos: photos });
         next();
     }).catch(next);
 };
