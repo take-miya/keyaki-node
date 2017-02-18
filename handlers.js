@@ -74,6 +74,7 @@ exports.getPosts = function (req, res, next) {
                 .orderBy('modified', 'desc')
                 .then(function (rows) {
                     return Promise.all(rows.map(function (row) {
+                        row.published = moment(row.published).format();
                         row.deleted = row.deleted ? moment(row.deleted).format() : null;
                         return row;
                     }));
@@ -119,7 +120,7 @@ exports.getPhotos = function (req, res, next) {
         ];
         debug('photos', photos);
         debug('lastUpdated', lastUpdated);
-        res.json({ result: 'success', last_updated: lastUpdated, photos: photos });
+        res.json({ result: 'success', last_updated: lastUpdated, photos: photos  });
         next();
     }).catch(next);
 };
