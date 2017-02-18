@@ -137,7 +137,7 @@ exports.getTopics = function (req, res, next) {
                 .orderBy('modified', 'desc')
                 .then(function (rows) {
                     return Promise.all(rows.map(function (row) {
-                        row.published = moment(row.deleted).format();
+                        row.published = moment(row.published).format();
                         return row;
                     }));
                 }),
@@ -166,7 +166,7 @@ exports.getPages = function (req, res, next) {
                 .orderBy('modified', 'desc')
                 .then(function (rows) {
                     return Promise.all(rows.map(function (row) {
-                        row.published = moment(row.deleted).format();
+                        row.published = moment(row.published).format();
                         row.deleted = row.deleted ? moment(row.deleted).format() : null;
                         return row;
                     }));
