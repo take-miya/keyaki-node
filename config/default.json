@@ -1,0 +1,11 @@
+{
+    "db": {
+        "client": "mysql",
+        "connection": {
+            "host": "localhost",
+            "user": "local_user",
+            "password": "keyaki",
+            "database": "keyaki_local"
+        }
+    }
+}
