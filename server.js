@@ -23,6 +23,12 @@ app.get('/pages/index', handlers.getPages);
 app.post('/users/add', handlers.addUser);
 app.post('/users/edit', handlers.addUser);
 
+app.use(function(req, res, next) {
+    debug('err', 'NOT FOUND');
+    if (!res.headersSent) res.status(404).send({ result: 'not found' });
+    next();
+});
+
 app.use(function(err, req, res, next) {
     debug('err', err);
     if (!res.headersSent) res.status(500).send({ result: 'failure' });
