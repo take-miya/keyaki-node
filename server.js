@@ -24,8 +24,9 @@ app.post('/users/add', handlers.addUser);
 app.post('/users/edit', handlers.addUser);
 
 app.use(function(req, res, next) {
+    if (res.headersSent) return next();
     debug('err', 'NOT FOUND');
-    if (!res.headersSent) res.status(404).send({ result: 'not found' });
+    res.status(404).send({ result: 'not found' });
     next();
 });
 
