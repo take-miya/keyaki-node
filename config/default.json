@@ -8,5 +8,15 @@
             "password": "keyaki",
             "database": "keyaki_local"
         }
+    },
+    "daemons": {
+        "blog": {
+            "interval": 60000,
+            "url": "http://www.keyakizaka46.com/s/k46o/diary/member"
+        }
+    },
+    "notification": {
+        "api_key": "AIzaSyD3_DZGFkYcIb7qbs2jbECL6tBXEuBxxW0",
+        "dry_run": true
     }
 }
