@@ -4,6 +4,7 @@ const debug = require('debug')('shell'),
     Config = require('config'),
     moment = require('moment'),
     knex = require('knex')(Config.db),
+    chunk = require('chunk'),
     client = require('cheerio-httpcli');
 
 const getPosts = function (members) {
@@ -39,7 +40,7 @@ const saveAndPush = function (post) {
 
 const save = function (post) {
     debug(`save post: ${post.id}`);
-    const row = Object.assign({}, post,  { created: moment().format("YYYY-MM-DD HH:mm:ss"), modified: moment().format("YYYY-MM-DD HH:mm:ss") });
+    const row = Object.assign({}, post, { created: moment().format("YYYY-MM-DD HH:mm:ss"), modified: moment().format("YYYY-MM-DD HH:mm:ss") });
     delete row.member_name;
     return knex('posts').insert(row);
 };
@@ -64,7 +65,10 @@ const push = function (post) {
             return row.token;
         }));
     }).then(function (tokens) {
-        return Notification.push(tokens, post.member_name, 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_BLOG_UPDATE', post.title, { url: Config.daemons.url + post.id });
+        const chunkedTokens = chunk(tokens, 1000);
+        return Promise.all(chunkedTokens.map(function (chunkedToken) {
+            return Notification.push(chunkedToken, post.member_name, 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_BLOG_UPDATE', post.title, { url: Config.daemons.url + post.id });
+        }));
     });
 }
 
@@ -74,7 +78,7 @@ const execute = function (members) {
     if (!members) {
         p = Member.getAll();
     } else p = Promise.resolve(members);
-    return p.then(getPosts).then(function(posts) {
+    return p.then(getPosts).then(function (posts) {
         return Promise.all(posts.map(saveAndPushIfNotExist));
     });
 };
