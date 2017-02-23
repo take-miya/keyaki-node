@@ -64,7 +64,7 @@ const push = function (post) {
             return row.token;
         }));
     }).then(function (tokens) {
-        return Notification.push(tokens, post.member_name, 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_BLOG_UPDATE', post.title, { url: Config.daemons.url + post.id });
+        return Notification.push(tokens, post.member_name, 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_BLOG_UPDATE', post.title, { url: Config.daemons.blog.url + '/' + post.id });
     });
 }
 

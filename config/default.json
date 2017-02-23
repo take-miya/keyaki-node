@@ -10,13 +10,21 @@
         }
     },
     "daemons": {
+        "top": {
+            "url": "http://www.keyakizaka46.com/s/k46o"
+        },
         "blog": {
             "interval": 30000,
             "url": "http://www.keyakizaka46.com/s/k46o/diary/member"
+        },
+        "topics": {
+            "interval": 30000,
+            "url": "http://www.keyakizaka46.com/s/k46o/news/detail"
         }
     },
     "notification": {
         "api_key": "AIzaSyD3_DZGFkYcIb7qbs2jbECL6tBXEuBxxW0",
-        "dry_run": true
+        "dry_run": true,
+        "interval": 5000
     }
 }

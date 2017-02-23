@@ -3,19 +3,30 @@ const debug = require('debug')('daemons'),
     co = require('co'),
     sleep = require('sleep-promise'),
     Member = require('./model/member'),
-    blogShell = require('./shell/blog');
+    BlogShell = require('./shell/blog'),
+    TopicShell = require('./shell/topics');
 
 const blogDaemon = function (members) {
     debug(`blog daemon start:${Date.now()}`);
-    return blogShell.execute(members).then(function() {
+    return BlogShell.execute(members).then(function() {
         return sleep(Config.daemons.blog.interval);
     }).then(function() {
-        return blogDaemon();
+        return blogDaemon(members);
     });
 };
 
+const topicDaemon = function() {
+    debug(`topics daemon start:${Date.now()}`);
+    return TopicShell.execute().then(function() {
+        return sleep(Config.daemons.topics.interval);
+    }).then(function() {
+        return topicDaemon();
+    });
+}
+
 co(function*() {
-    yield Member.getAll().then(blogDaemon);
+    yield [Member.getAll().then(blogDaemon), topicDaemon()];
 }).catch(function(err) {
     debug('err', err);
+    process.exit();
 })
