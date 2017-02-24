@@ -25,6 +25,7 @@ const topicDaemon = function() {
 }
 
 co(function*() {
+    debug('daemons start');
     yield [Member.getAll().then(blogDaemon), topicDaemon()];
 }).catch(function(err) {
     debug('err', err);
