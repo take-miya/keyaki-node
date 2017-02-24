@@ -39,7 +39,7 @@ const saveAndPush = function (post) {
 
 const save = function (post) {
     debug(`save post: ${post.id}`);
-    const row = Object.assign({}, post,  { created: moment().format("YYYY-MM-DD HH:mm:ss"), modified: moment().format("YYYY-MM-DD HH:mm:ss") });
+    const row = Object.assign({}, post, { created: moment().format("YYYY-MM-DD HH:mm:ss"), modified: moment().format("YYYY-MM-DD HH:mm:ss") });
     delete row.member_name;
     return knex('posts').insert(row);
 };
@@ -52,8 +52,8 @@ const push = function (post) {
         debug('memberIdBit', memberIdBit);
         p = knex.select('token').from('users').where('pushable_members', '&', memberIdBit);
     } else if (post.member_id < 65) {
-        debug('memberIdBit', memberIdBit);
         memberIdBit = 1 << (post.member_id - 33);
+        debug('memberIdBit', memberIdBit);
         p = knex.select('token').from('users').where('pushable_members2', '&', memberIdBit);
     } else {
         p = knex.select('token').from('users');
@@ -74,7 +74,7 @@ const execute = function (members) {
     if (!members) {
         p = Member.getAll();
     } else p = Promise.resolve(members);
-    return p.then(getPosts).then(function(posts) {
+    return p.then(getPosts).then(function (posts) {
         return Promise.all(posts.map(saveAndPushIfNotExist));
     });
 };
