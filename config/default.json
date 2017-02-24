@@ -10,16 +10,19 @@
         }
     },
     "daemons": {
-        "top": {
-            "url": "http://www.keyakizaka46.com/s/k46o"
-        },
         "blog": {
             "interval": 30000,
-            "url": "http://www.keyakizaka46.com/s/k46o/diary/member"
+            "url": {
+                "index": "http://www.keyakizaka46.com/s/k46o/diary/member",
+                "detail": "http://www.keyakizaka46.com/s/k46o/diary/detail"
+            }
         },
         "topics": {
-            "interval": 30000,
-            "url": "http://www.keyakizaka46.com/s/k46o/news/detail"
+            "interval": 300000,
+            "url": {
+                "index": "http://www.keyakizaka46.com/s/k46o",
+                "detail": "http://www.keyakizaka46.com/s/k46o/news/detail"
+            }
         }
     },
     "notification": {

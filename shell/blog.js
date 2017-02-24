@@ -7,7 +7,7 @@ const debug = require('debug')('shell'),
     client = require('cheerio-httpcli');
 
 const getPosts = function (members) {
-    const url = Config.daemons.blog.url;
+    const url = Config.daemons.blog.url.index;
     debug(`fetched url: ${url}`);
     return client.fetch(url).then(function (result) {
         const $ = result.$;
@@ -64,7 +64,7 @@ const push = function (post) {
             return row.token;
         }));
     }).then(function (tokens) {
-        return Notification.push(tokens, post.member_name, 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_BLOG_UPDATE', post.title, { url: Config.daemons.blog.url + '/' + post.id });
+        return Notification.push(tokens, post.member_name, 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_BLOG_UPDATE', post.title, { url: Config.daemons.blog.url.detail + '/' + post.id });
     });
 }
 

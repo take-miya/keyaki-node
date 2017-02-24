@@ -6,7 +6,7 @@ const debug = require('debug')('shell'),
     client = require('cheerio-httpcli');
 
 const getTopics = function () {
-    const url = Config.daemons.top.url;
+    const url = Config.daemons.topics.url.index;
     debug(`fetched url: ${url}`);
     return client.fetch(url).then(function (result) {
         const $ = result.$;
@@ -49,7 +49,7 @@ const push = function (topic) {
             return row.token;
         }));
     }).then(function (tokens) {
-        return Notification.push(tokens, '欅坂46ニュース', 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_NEWS_UPDATE', topic.title, { url: Config.daemons.topics.url + '/' + topic.id });
+        return Notification.push(tokens, '欅坂46ニュース', 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_NEWS_UPDATE', topic.title, { url: Config.daemons.topics.url.detail + '/' + topic.id });
     });
 }
 
