@@ -7,10 +7,9 @@ const fetchSite = function () {
     debug(`fetched url: ${url}`);
     return client.fetch(url).then(function (result) {
         const $ = result.$;
-        let isSuccess;
+        let isSuccess = true;
         $('img').map(function () {
-            if ($(this).attr('src') === 'http://cdn.l-tike.com/image/pc/ico/ico_seatState02.png') isSuccess = isSuccess || true;
-            if ($(this).attr('src') === 'http://cdn.l-tike.com/image/pc/ico/ico_seatState01.png') isSuccess = isSuccess || true;
+            if ($(this).attr('src') === 'http://cdn.l-tike.com/image/pc/ico/ico_seatState03.png') isSuccess = false;
         });
         if (isSuccess) return Promise.resolve(url);
         return Promise.resolve();

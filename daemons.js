@@ -6,7 +6,8 @@ const debug = require('debug')('daemons'),
     BlogShell = require('./shell/blog'),
     TopicShell = require('./shell/topics'),
     HmvShell = require('./shell/hmv'),
-    CnShell = require('./shell/cn');
+    CnShell = require('./shell/cn'),
+    EplusShell = require('./shell/eplus');
 
 const blogDaemon = function (members) {
     debug(`blog daemon start:${Date.now()}`);
@@ -29,7 +30,8 @@ const topicDaemon = function() {
 const ticketDaemon = function () {
     return Promise.all([
         HmvShell.execute(),
-        CnShell.execute()
+        CnShell.execute(),
+        EplusShell.execute()
     ]).then(function() {
         return sleep(300000);
     }).then(ticketDaemon);
