@@ -33,7 +33,7 @@ const ticketDaemon = function () {
         CnShell.execute(),
         EplusShell.execute()
     ]).then(function() {
-        return sleep(300000);
+        return sleep(60000);
     }).then(ticketDaemon);
 }
 
