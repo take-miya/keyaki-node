@@ -26,34 +26,18 @@ const topicDaemon = function() {
     });
 };
 
-const ticketDamons = function () {
+const ticketDaemon = function () {
     return Promise.all([
-        hmvDaemon(),
-        cnDaemon()
-    ]);
+        HmvShell.execute(),
+        CnShell.execute()
+    ]).then(function() {
+        return sleep(300000);
+    }).then(ticketDaemon);
 }
-
-const hmvDaemon = function() {
-    debug(`hmv daemon start:${Date.now()}`);
-    return HmvShell.execute().then(function() {
-        return sleep(60000);
-    }).then(function() {
-        return hmvDaemon();
-    });
-};
-
-const cnDaemon = function() {
-    debug(`cn daemon start:${Date.now()}`);
-    return CnShell.execute().then(function() {
-        return sleep(60000);
-    }).then(function() {
-        return cnDaemon();
-    });
-};
 
 co(function*() {
     debug('daemons start');
-    yield [Member.getAll().then(blogDaemon), topicDaemon(), ticketDaemons()];
+    yield [Member.getAll().then(blogDaemon), topicDaemon(), ticketDaemon()];
 }).catch(function(err) {
     debug('err', err);
     process.exit();
