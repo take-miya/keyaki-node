@@ -9,7 +9,7 @@ const fetchSite = function () {
         const $ = result.$;
         let isSuccess = true;
         $('td[class=fm]').map(function () {
-            if ($(this).text() === '18:30') isSuccess = false;
+            if ($(this).text() === '18:30×') isSuccess = false;
         });
         if (isSuccess) return Promise.resolve(url);
         return Promise.resolve();
@@ -27,4 +27,3 @@ const execute = function (members) {
     return fetchSite().then(sendMail);
 };
 exports.execute = execute;
-execute();
