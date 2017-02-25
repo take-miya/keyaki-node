@@ -24,7 +24,7 @@ const sendMail = function (url) {
 
 
 const execute = function (members) {
-    debug('ticket shell execute')
+    debug('ticket[hmv] shell execute')
     return fetchSite().then(sendMail);
 };
 exports.execute = execute;

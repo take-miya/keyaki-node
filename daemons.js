@@ -5,7 +5,8 @@ const debug = require('debug')('daemons'),
     Member = require('./model/member'),
     BlogShell = require('./shell/blog'),
     TopicShell = require('./shell/topics'),
-    HmvShell = require('./shell/hmv');
+    HmvShell = require('./shell/hmv'),
+    CnShell = require('./shell/cn');
 
 const blogDaemon = function (members) {
     debug(`blog daemon start:${Date.now()}`);
@@ -25,6 +26,13 @@ const topicDaemon = function() {
     });
 };
 
+const ticketDamons = function () {
+    return Promise.all([
+        hmvDaemon(),
+        cnDaemon()
+    ]);
+}
+
 const hmvDaemon = function() {
     debug(`hmv daemon start:${Date.now()}`);
     return HmvShell.execute().then(function() {
@@ -34,9 +42,18 @@ const hmvDaemon = function() {
     });
 };
 
+const cnDaemon = function() {
+    debug(`cn daemon start:${Date.now()}`);
+    return CnShell.execute().then(function() {
+        return sleep(60000);
+    }).then(function() {
+        return cnDaemon();
+    });
+};
+
 co(function*() {
     debug('daemons start');
-    yield [Member.getAll().then(blogDaemon), topicDaemon(), hmvDaemon()];
+    yield [Member.getAll().then(blogDaemon), topicDaemon(), ticketDaemons()];
 }).catch(function(err) {
     debug('err', err);
     process.exit();
