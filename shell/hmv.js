@@ -28,4 +28,3 @@ const execute = function (members) {
     return fetchSite().then(sendMail);
 };
 exports.execute = execute;
-execute();
