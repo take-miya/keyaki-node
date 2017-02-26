@@ -74,7 +74,7 @@ const push = function (item) {
             return row.token;
         }));
     }).then(function (tokens) {
-        return Notification.push(tokens, item.matome.title, 'TAKEMIYA_KEYAKI_NOTIFICATION_MATOME_UPDATE', item.item.title, { url: item.url });
+        return Notification.push(tokens, item.matome.title, 'TAKEMIYA_KEYAKI_NOTIFICATION_MATOME_UPDATE', item.item.title, { url: item.item.url });
     });
 }
 
