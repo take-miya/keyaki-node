@@ -14,7 +14,9 @@ const getTopics = function () {
             const topicId = ($(this).find('a').attr('href')).match(/detail\/([A-Z0-9]+)/)[1];
             const topicTitle = $($(this).find('a')[0]).text().trim();
             const m = $(this).find('time').text().trim().match(/^([0-9]+)\.([0-9]+)\.([0-9]+)/);
-            const topicDate = new Date(m[1], m[2], m[3]);
+            console.log(m);
+            const topicDate = new Date(m[1], m[2] - 1, m[3]);
+            console.log(topicDate);
             return { id: topicId, title: topicTitle, published: topicDate };
         }).get());
     });
@@ -37,7 +39,7 @@ const saveAndPush = function (topic) {
 
 const save = function (topic) {
     debug(`save topic: ${topic.id}`);
-    const row = Object.assign({}, topic,  { created: moment().format("YYYY-MM-DD HH:mm:ss"), modified: moment().format("YYYY-MM-DD HH:mm:ss") });
+    const row = Object.assign({}, topic, { created: moment().format("YYYY-MM-DD HH:mm:ss"), modified: moment().format("YYYY-MM-DD HH:mm:ss") });
     return knex('topics').insert(row);
 };
 
@@ -55,7 +57,7 @@ const push = function (topic) {
 
 const execute = function () {
     debug('topics shell execute');
-    return getTopics().then(function(topics) {
+    return getTopics().then(function (topics) {
         return Promise.all(topics.map(saveAndPushIfNotExist));
     });
 };

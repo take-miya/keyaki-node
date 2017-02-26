@@ -16,7 +16,7 @@ const getPosts = function (members) {
             const postTitle = $($(this).find('p')[0]).text().trim();
             const memberName = $($(this).find('p')[1]).text().trim();
             const m = $(this).find('time').text().trim().match(/^([0-9]+)\.([0-9]+)\.([0-9]+) ([0-9]+):([0-9]+)/);
-            const postDate = new Date(m[1], m[2], m[3], m[4], m[5]);
+            const postDate = new Date(m[1], m[2] - 1, m[3], m[4], m[5]);
             return { id: postId, title: postTitle, member_id: members[memberName], member_name: memberName, published: postDate };
         }).get());
     });
