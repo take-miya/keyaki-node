@@ -23,6 +23,9 @@
                 "index": "http://www.keyakizaka46.com/s/k46o",
                 "detail": "http://www.keyakizaka46.com/s/k46o/news/detail"
             }
+        },
+        "matome": {
+            "interval": 300000
         }
     },
     "notification": {

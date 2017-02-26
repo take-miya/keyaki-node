@@ -4,11 +4,11 @@ const debug = require('debug')('model'),
 
 exports.getAll = function () {
     debug('get all members');
-    return knex.select('id', 'name').from('members').then(function(rows) {
+    return knex.select('id', 'name').from('members').whereNull('deleted').then(function(rows) {
         const members = {};
         rows.map(function(row) {
             members[row.name] = row.id;
         });
         return Promise.resolve(members);
-    });;
+    });
 };
