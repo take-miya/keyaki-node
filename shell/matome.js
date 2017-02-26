@@ -6,8 +6,6 @@ const debug = require('debug')('shell'),
     FeedParser = require('feedparser'),
     request = require('request');
 
-let matomeTitle;
-
 const getItems = function (matome) {
     debug(`fetched feed: ${matome.feed}`);
 
@@ -34,7 +32,7 @@ const getItems = function (matome) {
 
         feedparser.on('readable', function () {
             while (item = this.read()) {
-                items.push({ matome_id: matome.id, title: item.title, url: item.link });
+                items.push({ item: { matome_id: matome.id, title: item.title, url: item.link }, matome: { title: matome.title } });
             }
         });
 
@@ -45,16 +43,16 @@ const getItems = function (matome) {
 };
 
 const saveAndPushIfNotExist = function (item) {
-    return knex.select('id').from('items').where({ matome_id: item.matome_id, url: item.url }).then(function ([row]) {
+    return knex.select('id').from('items').where({ matome_id: item.item.matome_id, url: item.item.url }).then(function ([row]) {
         if (!row) return saveAndPush(item);
-        debug(`exist link: ${item.url}`);
+        debug(`exist link: ${item.item.url}`);
         return Promise.resolve(item);
     });
 };
 
 const saveAndPush = function (item) {
     debug('item', item);
-    return save(item).then(function () {
+    return save(item.item).then(function () {
         return push(item);
     });
 };
@@ -66,9 +64,9 @@ const save = function (item) {
 };
 
 const push = function (item) {
-    debug(`push item: ${item.url}`);
+    debug(`push item: ${item.item.url}`);
 
-    matomeIdBit = 1 << (item.matome_id - 1);
+    matomeIdBit = 1 << (item.item.matome_id - 1);
     debug('matomeIdBit', matomeIdBit);
 
     return knex.select('token').from('users').where('pushable_matomes ', '&', matomeIdBit).then(function (rows) {
@@ -76,15 +74,14 @@ const push = function (item) {
             return row.token;
         }));
     }).then(function (tokens) {
-        return Notification.push(tokens, matomeTitle, 'TAKEMIYA_KEYAKI_NOTIFICATION_MATOME_UPDATE', item.title, { url: item.url });
+        return Notification.push(tokens, item.matome.title, 'TAKEMIYA_KEYAKI_NOTIFICATION_MATOME_UPDATE', item.item.title, { url: item.url });
     });
 }
 
 const execute = function (matome) {
     debug('items shell execute');
-    matomeTitle = matome.title;
     return getItems(matome).then(function (items) {
-        return Promise.all(items.map(saveAndPushIfNotExist));
+        return Promise.all(items.map(saveAndPushIfNotExist));   
     });
 };
 exports.execute = execute;
