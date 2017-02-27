@@ -14,9 +14,7 @@ const getTopics = function () {
             const topicId = ($(this).find('a').attr('href')).match(/detail\/([A-Z0-9]+)/)[1];
             const topicTitle = $($(this).find('a')[0]).text().trim();
             const m = $(this).find('time').text().trim().match(/^([0-9]+)\.([0-9]+)\.([0-9]+)/);
-            console.log(m);
             const topicDate = new Date(m[1], m[2] - 1, m[3]);
-            console.log(topicDate);
             return { id: topicId, title: topicTitle, published: topicDate };
         }).get());
     });
