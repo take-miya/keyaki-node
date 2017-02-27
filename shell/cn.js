@@ -11,8 +11,11 @@ const fetchSite = function () {
         $('td[class=fm]').map(function () {
             if ($(this).text() === '18:30×') isSuccess = false;
         });
-        if (isSuccess) return Promise.resolve(url);
-        return Promise.resolve();
+        if (!isSuccess) return Promise.resolve();
+        debug('success', $('td[class=fm]'));
+        return Promise.resolve(url);
+    }).catch(function(err) {
+        debug('err', err);
     });
 };
 

@@ -11,8 +11,11 @@ const fetchSite = function () {
         $('td[class=eventStatus]').map(function () {
             if ($(this).find('p').text() === '一般発売・予定枚数終了') isSuccess = false;
         });
-        if (isSuccess) return Promise.resolve(url);
-        return Promise.resolve();
+        if (!isSuccess) return Promise.resolve();
+        debug('success', $('td[class=eventStatus]'));
+        return Promise.resolve(url);
+    }).catch(function(err) {
+        debug('err', err);
     });
 };
 
