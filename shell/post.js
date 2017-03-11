@@ -1,13 +1,12 @@
 const debug = require('debug')('shell'),
-    Member = require('../model/member'),
-    Notification = require('../lib/notification'),
     Config = require('config'),
     moment = require('moment'),
     knex = require('knex')(Config.db),
-    client = require('cheerio-httpcli');
+    client = require('cheerio-httpcli')
+    twitter = require('twitter');
 
-const getPosts = function (members) {
-    const url = Config.daemons.blog.url.index;
+const getPost = function () {
+    const url = Config.daemons.blog.url.detail;
     debug(`fetched url: ${url}`);
     return client.fetch(url).then(function (result) {
         const $ = result.$;
@@ -23,7 +22,6 @@ const getPosts = function (members) {
 };
 
 const saveAndPushIfNotExist = function (post) {
-    debug('post', post);
     return knex.select('id').from('posts').where('id', '=', post.id).then(function ([row]) {
         if (!row) return saveAndPush(post);
         debug(`exist post_id: ${post.id}`);
@@ -45,38 +43,33 @@ const save = function (post) {
     return knex('posts').insert(row);
 };
 
-const push = function (post) {
-    debug(`push post: ${post.id}`);
-    let p;
-    if (post.member_id < 33) {
-        memberIdBit = 1 << (post.member_id - 1);
-        debug('memberIdBit', memberIdBit);
-        p = knex.select('token').from('users').where('pushable_members', '&', memberIdBit);
-    } else if (post.member_id < 65) {
-        memberIdBit = 1 << (post.member_id - 33);
-        debug('memberIdBit', memberIdBit);
-        p = knex.select('token').from('users').where('pushable_members2', '&', memberIdBit);
-    } else {
-        p = knex.select('token').from('users');
-    }
+const getPostsOfNoTweet = function () {
+    debug('get post of no tweet');
+    return knex.select('id').from('posts').whereNull('twitter_media_url').whereNull('deleted');
+};
 
-    return p.then(function (rows) {
-        return Promise.all(rows.map(function (row) {
-            return row.token;
-        }));
-    }).then(function (tokens) {
-        return Notification.push(tokens, post.member_name, 'TAKEMIYA_KEYAKI_NOTIFICATION_OFFICIAL_BLOG_UPDATE', post.title, { url: Config.daemons.blog.url.detail + '/' + post.id });
-    });
-}
+const tweetAndSaveDetail = function (post) {
+    return getDetail(post).then(tweet).then(save);
+};
 
-const execute = function (members) {
-    debug('blog shell execute')
-    let p;
-    if (!members) {
-        p = Member.getAll();
-    } else p = Promise.resolve(members);
-    return p.then(getPosts).then(function (posts) {
-        return Promise.all(posts.map(saveAndPushIfNotExist));
+const getDetail = function (post) {
+    const url = Config.daemons.blog.url.detail + '/' + post.id;
+    debug(`fetched url: ${url}`);
+    return client.fetch(url).then(function (result) {
+        console.log(result.$('div[class=box-article]').text().trim());
+        return result.$('div[class=box-article]').text().trim();
     });
+};
+
+const tweet = function (detail) {
+
+};
+
+const execute = function () {
+    debug('post shell execute')
+    return Promise.resolve();
+    // return getPostsOfNoTweet().then(function (posts) {
+    //     return Promise.all(posts.map(tweetAndSaveDetail));
+    // });
 };
 exports.execute = execute;

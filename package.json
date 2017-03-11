@@ -24,6 +24,7 @@
     "mysql": "^2.13.0",
     "node-gcm": "^0.14.4",
     "sendmail": "^1.1.1",
-    "sleep-promise": "^2.0.0"
+    "sleep-promise": "^2.0.0",
+    "twitter": "^1.7.0"
   }
 }
