@@ -55,7 +55,7 @@ const ticketDaemon = function () {
         //HmvShell.execute(),
         //CnShell.execute(),
         //EplusShell.execute(),
-        Rakuten.execute()
+        RakutenShell.execute()
     ]).then(function () {
         return sleep(60000);
     }).then(ticketDaemon);
