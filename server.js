@@ -30,7 +30,7 @@ app.use(function(req, res, next) {
     if (res.headersSent) return next();
     debug('err', 'NOT FOUND');
     res.status(404).send({ result: 'not found' });
-    next('aaa');
+    next();
 });
 
 app.use(function(err, req, res, next) {
