@@ -63,7 +63,7 @@ const ticketDaemon = function () {
 
 co(function* () {
     console.log('daemons start');
-    yield [Member.getAll().then(blogDaemon), postDaemon(), topicDaemon(), Matome.getAll().then(matomeDaemon), ticketDaemon()];
+    yield [Member.getAll().then(blogDaemon), postDaemon(), topicDaemon(), Matome.getAll().then(matomeDaemon)];
 }).catch(function (err) {
     console.log(err);
     process.exit();

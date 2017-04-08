@@ -3,12 +3,15 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     expressValidator = require('express-validator'),
     Config = require('config'),
+    Mail = require('./lib/mail'),
     debug = require('debug')('server'),
     handlers = require('./handlers');
 
 app.listen(Config.port, function() {
     debug("Node.js is listening to PORT: " + Config.port);
 });
+
+app.use(express.static('public'));
 
 app.use(bodyParser.json());
 app.use(expressValidator());
@@ -27,11 +30,17 @@ app.use(function(req, res, next) {
     if (res.headersSent) return next();
     debug('err', 'NOT FOUND');
     res.status(404).send({ result: 'not found' });
-    next();
+    next('aaa');
 });
 
 app.use(function(err, req, res, next) {
     debug('err', err);
     if (!res.headersSent) res.status(500).send({ result: 'failure' });
-    next();
-})
+    Mail.send('error', err).then(function() {
+        next();
+    }).catch(next);
+});
+
+app.use(function(err, req, res, next) {
+    debug('err', err);
+});
