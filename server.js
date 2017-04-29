@@ -36,7 +36,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
     debug('err', err);
     if (!res.headersSent) res.status(500).send({ result: 'failure' });
-    Mail.send('error', err).then(function() {
+    Mail.send('error', err.message).then(function() {
         next();
     }).catch(next);
 });

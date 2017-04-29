@@ -67,6 +67,6 @@ co(function* () {
     yield [Member.getAll().then(blogDaemon), postDaemon(), topicDaemon(), Matome.getAll().then(matomeDaemon)];
 }).catch(function (err) {
     console.log(err);
-    yield Mail.send('error', err);
+    Mail.send('error', err.message)
     process.exit();
 })
