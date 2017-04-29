@@ -1,6 +1,7 @@
 const Config = require('config'),
     co = require('co'),
     sleep = require('sleep-promise'),
+    Mail = require('./lib/mail'),
     Member = require('./model/member'),
     Matome = require('./model/matome'),
     BlogShell = require('./shell/blog'),
@@ -66,5 +67,6 @@ co(function* () {
     yield [Member.getAll().then(blogDaemon), postDaemon(), topicDaemon(), Matome.getAll().then(matomeDaemon)];
 }).catch(function (err) {
     console.log(err);
+    yield Mail.send('error', err);
     process.exit();
 })
