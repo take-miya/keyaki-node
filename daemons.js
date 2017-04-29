@@ -7,11 +7,11 @@ const Config = require('config'),
     BlogShell = require('./shell/blog'),
     PostShell = require('./shell/post'),
     TopicShell = require('./shell/topics'),
-    MatomeShell = require('./shell/matome'),
-    HmvShell = require('./shell/hmv'),
-    CnShell = require('./shell/cn'),
-    EplusShell = require('./shell/eplus'),
-    RakutenShell = require('./shell/rakuten');
+    MatomeShell = require('./shell/matome');
+    // HmvShell = require('./shell/hmv'),
+    // CnShell = require('./shell/cn'),
+    // EplusShell = require('./shell/eplus'),
+    // RakutenShell = require('./shell/rakuten');
 
 const blogDaemon = function (members) {
     console.log(`blog daemon start:${Date.now()}`);
@@ -56,7 +56,7 @@ const ticketDaemon = function () {
         //HmvShell.execute(),
         //CnShell.execute(),
         //EplusShell.execute(),
-        RakutenShell.execute()
+        //RakutenShell.execute()
     ]).then(function () {
         return sleep(60000);
     }).then(ticketDaemon);
