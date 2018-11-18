@@ -15,6 +15,7 @@ const getItems = function (matome) {
         const items = [];
 
         req.on('error', function (err) {
+debug('req error', err);
             reject(err);
         });
 
@@ -27,6 +28,7 @@ const getItems = function (matome) {
         });
 
         feedparser.on('error', function (err) {
+debug('feed error', err);
             reject(err);
         });
 

@@ -3,7 +3,7 @@ const debug = require('debug')('shell'),
     client = require('cheerio-httpcli');
 
 const fetchSite = function () {
-    const url = 'http://ticket.rakuten.co.jp/music/jpop/idle/RTZPAAA';
+    const url = 'https://ticket.rakuten.co.jp/music/jpop/idle/RTZPADG';
     debug(`fetched url: ${url}`);
     return client.fetch(url).then(function (result) {
         const $ = result.$;

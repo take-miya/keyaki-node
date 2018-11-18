@@ -1,4 +1,5 @@
 const Config = require('config'),
+    debug = require('debug')('daemon'),
     co = require('co'),
     sleep = require('sleep-promise'),
     Mail = require('./lib/mail'),
@@ -8,10 +9,10 @@ const Config = require('config'),
     PostShell = require('./shell/post'),
     TopicShell = require('./shell/topics'),
     MatomeShell = require('./shell/matome');
-    // HmvShell = require('./shell/hmv'),
+    HmvShell = require('./shell/hmv'),
     // CnShell = require('./shell/cn'),
     // EplusShell = require('./shell/eplus'),
-    // RakutenShell = require('./shell/rakuten');
+    RakutenShell = require('./shell/rakuten');
 
 const blogDaemon = function (members) {
     console.log(`blog daemon start:${Date.now()}`);
@@ -52,11 +53,12 @@ const matomeDaemon = function (matomes) {
 };
 
 const ticketDaemon = function () {
+    console.log(`ticket daemon start:${Date.now()}`);
     return Promise.all([
         //HmvShell.execute(),
         //CnShell.execute(),
         //EplusShell.execute(),
-        //RakutenShell.execute()
+        RakutenShell.execute()
     ]).then(function () {
         return sleep(60000);
     }).then(ticketDaemon);
@@ -64,8 +66,9 @@ const ticketDaemon = function () {
 
 co(function* () {
     console.log('daemons start');
-    yield [Member.getAll().then(blogDaemon), postDaemon(), topicDaemon(), Matome.getAll().then(matomeDaemon)];
+    yield [Member.getAll().then(blogDaemon), postDaemon(), topicDaemon(), Matome.getAll().then(matomeDaemon)/*, ticketDaemon()*/];
 }).catch(function (err) {
+    debug('server err', err);
     console.error(err.message);
-    Mail.send('error', err.message).then(function() { process.exit(); });
+    return Mail.send('error', err.message? err.message:'').then(function() { process.exit(); }).catch(function(err) { console.log('err.message'); process.exit(); });
 })
